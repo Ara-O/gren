@@ -1,3 +1,7 @@
 <template>
-  <h3 class="text-pink-300">Bahnahnah</h3>
+  <navigation-bar></navigation-bar>
 </template>
+
+<script setup lang="ts">
+import navigationBar from "../components/Navigation/NavigationBar.vue";
+</script>
