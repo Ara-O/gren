@@ -1,5 +1,7 @@
 <template>
-  <nav class="flex gap-[2rem] justify-between text-sm items-center font-normal">
+  <nav
+    class="flex gap-[2rem] justify-between text-sm items-center font-normal mb-8"
+  >
     <div class="h-8 w-8 bg-gren rounded"></div>
     <router-link to="/">Home</router-link>
     <router-link to="/">Deals</router-link>

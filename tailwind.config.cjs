@@ -3,8 +3,12 @@ module.exports = {
   content: ["./index.html", "./src/**/*.{vue,js,ts,jsx,tsx}"],
   theme: {
     extend: {
+      backgroundImage: {
+        hero: "url('./src/assets/leaves.png')",
+      },
       colors: {
         gren: "#0F2D14",
+        bestSellingProductItem: "#E8E8E8",
       },
     },
   },

@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 html {
-  padding: 30px 40px;
+  padding: 30px 80px;
   font-family: "Poppins";
 }
 :root {
