@@ -6,6 +6,9 @@ module.exports = {
       backgroundImage: {
         hero: "url('./src/assets/leaves.png')",
       },
+      width: {
+        128: "32rem",
+      },
       colors: {
         gren: "#0F2D14",
         bestSellingProductItem: "#E8E8E8",
