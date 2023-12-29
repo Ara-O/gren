@@ -10,8 +10,7 @@ module.exports = {
         128: "32rem",
       },
       colors: {
-        gren: "#0F2D14",
-        bestSellingProductItem: "#E8E8E8",
+        gridcolor: "rgb(156 163 175)",
       },
     },
   },
