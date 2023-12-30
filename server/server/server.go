@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/ara-o/gren/database"
 	"github.com/ara-o/gren/routes/register"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
@@ -16,6 +17,8 @@ type server struct {
 
 func (s *server) Start() error {
 	fmt.Println("Starting server...")
+
+	database.Start()
 
 	r := chi.NewRouter()
 
@@ -33,6 +36,7 @@ func (s *server) Start() error {
 	loadRoutes(r)
 
 	fmt.Println("Server listening on", s.address)
+
 	return http.ListenAndServe(s.address, r)
 }
 

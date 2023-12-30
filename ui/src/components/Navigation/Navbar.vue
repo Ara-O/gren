@@ -21,7 +21,7 @@ import registrationPopup from "../Registration/RegistrationPopup.vue"
 let registrationPopupIsOpen = ref<boolean>(false)
 
 onMounted(() => {
-  console.log("onmoeunted");
+  console.log("onmounted");
 });
 
 function openRegistrationPopup() {
