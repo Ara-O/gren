@@ -36,11 +36,11 @@
 
                 </div>
 
-                <h4 class="mt-7 hover:underline">Already have an account?</h4>
+                <h4 class="mt-4 hover:underline">Already have an account?</h4>
 
-                <base-button class="mt-6" type="submit">Sign up</base-button>
-
-                <div class="relative flex items-center justify-center mt-7">
+                <base-button type="submit" class="mt-6">Sign up</base-button>
+                <h4 class="text-red-600 mt-5">{{ errorMessage }}</h4>
+                <div class="relative flex items-center justify-center mt-3">
                     <div class="absolute bg-black h-[0.5px] w-full "></div>
                     <h4 class="inline bg-white z-10 w-10 text-center">or</h4>
                 </div>
@@ -58,9 +58,12 @@
 import BaseButton from '../Buttons/BaseButton.vue';
 import { Form, Field, ErrorMessage } from 'vee-validate'
 import { object, string } from "yup"
+import { ref } from 'vue';
 import axios from "axios"
 
 const emits = defineEmits(['closePopup'])
+
+let errorMessage = ref<string>("")
 
 const schema = object({
     "full_name": string().trim().required('Full name is required').min(2, "Full name must be at least 2 characters"),
@@ -71,11 +74,14 @@ const schema = object({
 
 async function register(values: any) {
     try {
+        errorMessage.value = ""
         console.log('Registering...', values)
         let res = await axios.post(`${import.meta.env.VITE_API_URL}/api/register`, values)
         console.log(res)
-    } catch (err) {
+    } catch (err: any) {
         console.log(err)
+        errorMessage.value = err?.response?.data || "An error occured"
+
     }
 }
 </script>

@@ -8,7 +8,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-var connection *mongo.Database
+var db *mongo.Database
 
 func Start() {
 
@@ -23,10 +23,9 @@ func Start() {
 		panic(err)
 	}
 
-	connection = client.Database("main")
-
+	db = client.Database("main")
 }
 
-func GetConnection() {
-
+func GetDatabase() *mongo.Database {
+	return db
 }
