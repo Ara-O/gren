@@ -4,6 +4,9 @@ import App from "./App.vue";
 import BaseButtonVue from "./components/Buttons/BaseButton.vue";
 import Router from "./router/index";
 import { configure } from "vee-validate";
+import axios from "axios";
+
+axios.defaults.withCredentials = true
 
 configure({
     validateOnBlur: true,

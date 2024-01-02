@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/ara-o/gren/database"
+	"github.com/ara-o/gren/middlewares"
 	"github.com/ara-o/gren/routes/register"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
@@ -48,7 +49,7 @@ func New(address string) *server {
 
 func loadRoutes(r *chi.Mux) {
 	r.Post("/api/register", register.Register)
-	r.Get("/hi", func(w http.ResponseWriter, r *http.Request) {
+	r.Get("/hi", middlewares.AuthMiddleware(func(w http.ResponseWriter, r *http.Request) {
 		w.Write([]byte("Hello"))
-	})
+	}))
 }

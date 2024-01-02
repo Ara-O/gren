@@ -34,7 +34,7 @@ func (userData *UserRegistrationData) sanitize() {
 	userData.Password = strings.TrimSpace(userData.Password)
 }
 
-func encryptPassword(password string) (string, error) {
+func hashPassword(password string) (string, error) {
 	hash, err := bcrypt.GenerateFromPassword([]byte(password), 10)
 
 	if err != nil {
@@ -49,7 +49,7 @@ func validateAndFormalizeInput(userData *UserRegistrationData) error {
 	userData.sanitize()
 
 	// Encrypt password
-	hash, err := encryptPassword(userData.Password)
+	hash, err := hashPassword(userData.Password)
 	if err != nil {
 		fmt.Println(err)
 		return err
