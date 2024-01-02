@@ -27,7 +27,7 @@ func (s *server) Start() error {
 		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token"},
 		ExposedHeaders:   []string{"Link"},
-		AllowCredentials: false,
+		AllowCredentials: true,
 		MaxAge:           300,
 	}))
 
@@ -48,4 +48,7 @@ func New(address string) *server {
 
 func loadRoutes(r *chi.Mux) {
 	r.Post("/api/register", register.Register)
+	r.Get("/hi", func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte("Hello"))
+	})
 }

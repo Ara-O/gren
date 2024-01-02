@@ -23,9 +23,9 @@ type UserRegistrationData struct {
 }
 
 type Session struct {
-	SessionID string `json:"session_id" bson:"session_id"`
-	UserID    string `json:"user_id" bson:"user_id"`
-	IAT       string `json:"iat" bson:"iat"`
+	SessionID string    `json:"session_id" bson:"session_id"`
+	UserID    string    `json:"user_id" bson:"user_id"`
+	IAT       time.Time `json:"iat" bson:"iat"`
 }
 
 func (userData *UserRegistrationData) sanitize() {
@@ -44,12 +44,7 @@ func encryptPassword(password string) (string, error) {
 	return string(hash), nil
 }
 
-func Register(w http.ResponseWriter, r *http.Request) {
-	userData := UserRegistrationData{}
-
-	json.NewDecoder(r.Body).Decode(&userData)
-	defer r.Body.Close()
-
+func validateAndFormalizeInput(userData *UserRegistrationData) error {
 	// Sanitize user input
 	userData.sanitize()
 
@@ -57,13 +52,32 @@ func Register(w http.ResponseWriter, r *http.Request) {
 	hash, err := encryptPassword(userData.Password)
 	if err != nil {
 		fmt.Println(err)
-		http.Error(w, "Error encrypting password", http.StatusInternalServerError)
-		return
+		return err
 	}
 
 	userData.Password = hash
 
-	// Store user in db, which will return user id
+	return nil
+}
+
+func Register(w http.ResponseWriter, r *http.Request) {
+	userData := UserRegistrationData{}
+
+	err := json.NewDecoder(r.Body).Decode(&userData)
+
+	if err != nil {
+		fmt.Println(err)
+		http.Error(w, "An error occured. Please try again", http.StatusInternalServerError)
+		return
+	}
+
+	defer r.Body.Close()
+
+	if err := validateAndFormalizeInput(&userData); err != nil {
+		http.Error(w, "An error occured. Please try again", http.StatusInternalServerError)
+		return
+	}
+
 	conn := database.GetDatabase()
 
 	coll := conn.Collection("users")
@@ -94,16 +108,16 @@ func Register(w http.ResponseWriter, r *http.Request) {
 	}
 
 	insertedId := res.InsertedID.(primitive.ObjectID).Hex()
-	fmt.Println(insertedId)
 
 	sessionColl := conn.Collection("sessions")
 
 	session := Session{
 		SessionID: uuid.New().String(),
 		UserID:    insertedId,
-		IAT:       time.Now().String(),
+		IAT:       time.Now(),
 	}
 
+	//Insert session into database
 	res, err = sessionColl.InsertOne(context.TODO(), session)
 	if err != nil {
 		fmt.Println(err)
@@ -111,5 +125,14 @@ func Register(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.Write([]byte(res.InsertedID.(primitive.ObjectID).Hex()))
+	cookie := &http.Cookie{
+		Name:  "session_id",
+		Value: res.InsertedID.(primitive.ObjectID).Hex(),
+		// Secure:  true,
+		Expires: time.Now().Add(24 * time.Hour), // Set the expiration time accordingly
+	}
+
+	w.Header().Set("access-control-expose-headers", "Set-Cookie")
+	http.SetCookie(w, cookie)
+	w.Write([]byte("Success! User account created"))
 }

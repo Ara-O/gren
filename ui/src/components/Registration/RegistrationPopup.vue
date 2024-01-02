@@ -47,7 +47,7 @@
 
                 <div class="flex gap-3 items-center mt-5">
                     <h4>Sign up with: </h4>
-                    <img src="../../assets/github-icon.png" class="w-5 mt-0 cursor-pointer" alt="Github icon">
+                    <img @click="test" src="../../assets/github-icon.png" class="w-5 mt-0 cursor-pointer" alt="Github icon">
                 </div>
             </Form>
         </section>
@@ -83,5 +83,9 @@ async function register(values: any) {
         errorMessage.value = err?.response?.data || "An error occured"
 
     }
+}
+
+function test() {
+    axios.get("http://localhost:8080/hi")
 }
 </script>
