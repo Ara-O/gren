@@ -76,7 +76,7 @@ async function register(values: any) {
     try {
         errorMessage.value = ""
         console.log('Registering...', values)
-        let res = await axios.post(`${import.meta.env.VITE_API_URL}/api/register`, values)
+        let res = await axios.post(`${import.meta.env.VITE_API_URL}/api/register`, values, { withCredentials:true})
         console.log(res)
     } catch (err: any) {
         console.log(err)
@@ -86,6 +86,6 @@ async function register(values: any) {
 }
 
 function test() {
-    axios.get("http://localhost:8080/hi")
+    axios.get("http://localhost:8081/hi", { withCredentials:true})
 }
 </script>
