@@ -129,10 +129,12 @@ func Register(w http.ResponseWriter, r *http.Request) {
 		Name:  "session_id",
 		Value: res.InsertedID.(primitive.ObjectID).Hex(),
 		// Secure:  true,
-		Expires: time.Now().Add(24 * time.Hour), // Set the expiration time accordingly
+		Path:     "/",
+		SameSite: 0,
+		Expires:  time.Now().Add(24 * time.Hour), // Set the expiration time accordingly
 	}
 
 	w.Header().Set("access-control-expose-headers", "Set-Cookie")
 	http.SetCookie(w, cookie)
-	w.Write([]byte("Success! User account created"))
+	// w.Write([]byte("Success! User account created"))
 }
